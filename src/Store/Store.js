@@ -36,98 +36,97 @@ export const StoreProvider = ({ children }) => {
     const [maticBalance, setMaticBalance] = useState(0)
 
 
-    const connectWallet = async () => {
-        console.log(process.env.REACT_APP_CHAIN_ID, "process.env.CHAIN_IDprocess.env.CHAIN_IDprocess.env.CHAIN_ID")
-        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    // const connectWallet = async () => {
+    //     console.log(process.env.REACT_APP_CHAIN_ID, "process.env.CHAIN_IDprocess.env.CHAIN_IDprocess.env.CHAIN_ID")
+    //     const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
-        // Check if MetaMask is installed
-        if (typeof window.ethereum !== "undefined") {
-            try {
-                // Check if the wallet is already connected
-                if (!isMobile && !isWalletConnected) {
-                    await ethereum.request({
-                        method: "wallet_switchEthereumChain",
-                        params: [
-                            {
-                                chainId: process.env.REACT_APP_CHAIN_ID, // Replace with your desired chain ID
-                            },
-                        ],
-                    });
+    //     // Check if MetaMask is installed
+    //     if (typeof window.ethereum !== "undefined") {
+    //         try {
+    //             // Check if the wallet is already connected
+    //             if (!isMobile && !isWalletConnected) {
+    //                 await ethereum.request({
+    //                     method: "wallet_switchEthereumChain",
+    //                     params: [
+    //                         {
+    //                             chainId: process.env.REACT_APP_CHAIN_ID, // Replace with your desired chain ID
+    //                         },
+    //                     ],
+    //                 });
 
-                    const accounts = await window.ethereum.request({
-                        method: "eth_requestAccounts",
-                    });
+    //                 const accounts = await window.ethereum.request({
+    //                     method: "eth_requestAccounts",
+    //                 });
 
-                    setAccount(accounts[0]);
-                    setIsWalletConnected(true);
+    //                 setAccount(accounts[0]);
+    //                 setIsWalletConnected(true);
 
-                }
-                else if (isMobile) {
-                    const accounts = await window.ethereum.request({
-                        method: "eth_requestAccounts",
-                    });
-                    setAccount(accounts[0]);
-                    setIsWalletConnected(true);
-                }
-            } catch (err) {
-                setIsWalletConnected(false);
-                toast.error(err.message);
-                console.error(err.message);
-            }
+    //             }
+    //             else if (isMobile) {
+    //                 const accounts = await window.ethereum.request({
+    //                     method: "eth_requestAccounts",
+    //                 });
+    //                 setAccount(accounts[0]);
+    //                 setIsWalletConnected(true);
+    //             }
+    //         } catch (err) {
+    //             setIsWalletConnected(false);
+    //             toast.error(err.message);
+    //             console.error(err.message);
+    //         }
 
-        } else {
-            if (isMobile) {
-                // Metamask app is not installed, redirect to installation page
-                window.open("https://metamask.app.link/dapp/https://staking-dapp-project.vercel.app/");
-                return;
-            } else {
-                // if no window.ethereum and no window.web3, then MetaMask or Trust Wallet is not installed
-                alert('MetaMask or Trust Wallet is not installed. Please consider installing one of them.');
-                return;
-            }
-        }
-    };
+    //     } else {
+    //         if (isMobile) {
+    //             // Metamask app is not installed, redirect to installation page
+    //             window.open("https://metamask.app.link/dapp/https://staking-dapp-project.vercel.app/");
+    //             return;
+    //         } else {
+    //             // if no window.ethereum and no window.web3, then MetaMask or Trust Wallet is not installed
+    //             alert('MetaMask or Trust Wallet is not installed. Please consider installing one of them.');
+    //             return;
+    //         }
+    //     }
+    // };
 
 
-    const checkIsWalletConnected = async () => {
-        try {
-            window.ethereum.on("accountsChanged", async function (accounts) {
-                setAccount(accounts[0]);
-                setIsWalletConnected(true)
-            });
-            window.ethereum.on('chainChanged', async (chainId) => {
-                if (chainId != process.env.REACT_APP_CHAIN_ID) { //TODO
-                    await ethereum.request({
-                        method: "wallet_switchEthereumChain",
-                        params: [
-                            {
-                                // chainId: "0x5" //Goerli
-                                // chainId: "0x89", //PolygonMainnet
-                                // chainId: "0xaa36a7", //sepolia
-                                // chainId: "0x1", //Miannet
-                                chainId: process.env.CHAIN_ID //localHost TODO
-                                // chainId:"0x13881" //mumbai
-                                // chainId:"0x61"//bnb
+    // const checkIsWalletConnected = async () => {
+    //     try {
+    //         window.ethereum.on("accountsChanged", async function (accounts) {
+    //             setAccount(accounts[0]);
+    //             setIsWalletConnected(true)
+    //         });
+    //         window.ethereum.on('chainChanged', async (chainId) => {
+    //             if (chainId != process.env.REACT_APP_CHAIN_ID) { //TODO
+    //                 await ethereum.request({
+    //                     method: "wallet_switchEthereumChain",
+    //                     params: [
+    //                         {
+    //                             // chainId: "0x5" //Goerli
+    //                             // chainId: "0x89", //PolygonMainnet
+    //                             // chainId: "0xaa36a7", //sepolia
+    //                             // chainId: "0x1", //Miannet
+    //                             chainId: process.env.CHAIN_ID //localHost TODO
+    //                             // chainId:"0x13881" //mumbai
+    //                             // chainId:"0x61"//bnb
 
-                            },
-                        ],
-                    });
-                }
-            })
-            const accounts = await ethereum.request({ method: "eth_accounts" });
-            if (accounts.length) {
-                setAccount(accounts[0]);
-                setIsWalletConnected(true);
-            } else {
-                console.log("No account Found");
-                setIsWalletConnected(false);
-            }
-        } catch (err) {
-            console.log(err.message)
-            setIsWalletConnected(false);
-        }
-    };
-
+    //                         },
+    //                     ],
+    //                 });
+    //             }
+    //         })
+    //         const accounts = await ethereum.request({ method: "eth_accounts" });
+    //         if (accounts.length) {
+    //             setAccount(accounts[0]);
+    //             setIsWalletConnected(true);
+    //         } else {
+    //             console.log("No account Found");
+    //             setIsWalletConnected(false);
+    //         }
+    //     } catch (err) {
+    //         console.log(err.message)
+    //         setIsWalletConnected(false);
+    //     }
+    // };
 
 
     const GetUserAndOwnerDetails = async () => {
@@ -222,8 +221,8 @@ export const StoreProvider = ({ children }) => {
         <>
             <Store.Provider
                 value={{
-                    connectWallet,
-                    checkIsWalletConnected,
+                    // connectWallet,
+                    // checkIsWalletConnected,
                     mainAccount,
                     isWalletConnected,
                     loader,

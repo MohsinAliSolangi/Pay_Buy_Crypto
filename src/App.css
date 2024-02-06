@@ -30,13 +30,16 @@
 
 
 .customButton {
-  background-color: #008CBA;
+  background-color: #333333;
   color: white;
   padding: 10px 20px;
   margin: 10px;
   cursor: pointer;
   border-radius: 5px;
   font-size: 22px;
+  justify-content: center;
+  align-items: center;
+  display: flex;
 }
 .customButton:disabled {
   background-color: #4f4f4f; /* Light Dark color when button is disabled */
