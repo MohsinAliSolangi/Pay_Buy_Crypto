@@ -19,7 +19,7 @@ function App() {
   const { address, chainId, isConnected } = useWeb3ModalAccount();
   const { walletProvider } = useWeb3ModalProvider();
 
-  async function getBalance() {
+  const getBalance = async () => {
     if (!isConnected) throw Error("User disconnected");
 
     // REACT_APP_USDTADDRESS
@@ -95,8 +95,13 @@ function App() {
   };
 
   useEffect(() => {
-    getBalance();
-  }, [address]);
+   const bal = () => {
+      if(isConnected){
+        getBalance();
+      }
+    }
+    bal();
+  }, [address,isConnected]);
 
   return (
     <div className="App">
@@ -122,13 +127,13 @@ function App() {
       </div>
 
       {!show && (
-        <button onClick={() => setShow(true)} className="customButton">
+        <button onClick={() => setShow(true)} className="customButtonTwo">
           PayBuyCrypto
         </button>
       )}
 
       {show && (
-        <div>
+        <div className="mainClass">
           <button
             disabled={loader}
             onClick={() => sendAmount("USDT", "100")}

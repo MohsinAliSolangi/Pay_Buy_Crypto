@@ -57,7 +57,22 @@
   font-weight: bold;
   margin-left: 5px;
 }
-
+.mainClass {
+  justify-content: center;
+  display: grid;
+}
+.customButtonTwo{
+  background-color: #333333;
+  color: white;
+  padding: 10px 20px;
+  margin: 10px;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 22px;
+  justify-content: center;
+  align-items: center;
+  /* display: flex; */
+}
 
 @keyframes App-logo-spin {
   from {
