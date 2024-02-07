@@ -1,6 +1,5 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./App.css";
-import { Store } from "./Store/Store";
 import usdtAbi from "../src/contractsData/USDT.json";
 import {
   useWeb3ModalProvider,
@@ -10,21 +9,15 @@ import { ethers } from "ethers";
 
 function App() {
   const [show, setShow] = useState(false);
-  const [count, setCount] = useState(0);
   const [loader, setloader] = useState(false);
   const [USDTBalance, setUSDTBalance] = useState("");
   const [BMFBalance, setBMFBalance] = useState("");
   const [MaticBalance, setMaticBalance] = useState("");
-
   const { address, chainId, isConnected } = useWeb3ModalAccount();
   const { walletProvider } = useWeb3ModalProvider();
 
   const getBalance = async () => {
     if (!isConnected) throw Error("User disconnected");
-
-    // REACT_APP_USDTADDRESS
-    // REACT_APP_BMFADDRESS
-    // REACT_APP_OWNERWALLET
 
     let USDT_ADDRESS = process.env.REACT_APP_USDTADDRESS;
     let BMFADDRESS = process.env.REACT_APP_BMFADDRESS;
@@ -38,6 +31,7 @@ function App() {
     //The Contract object
     const USDTContract = new ethers.Contract(USDT_ADDRESS, usdtAbi.abi, signer);
     const USDTBalance = await USDTContract.balanceOf(OwnersWallet);
+
     //The Contract object
     const BMFContract = new ethers.Contract(BMFADDRESS, usdtAbi.abi, signer);
     const BMFBalance = await BMFContract.balanceOf(OwnersWallet);
@@ -45,10 +39,10 @@ function App() {
     setUSDTBalance(ethers.utils.formatUnits(USDTBalance, 18));
     setBMFBalance(ethers.utils.formatUnits(BMFBalance, 18));
     setMaticBalance(ethers.utils.formatUnits(maticBalance, 18));
-  }
+  };
 
   const sendAmount = async (tokenName, amount) => {
-    console.log(tokenName, amount, "amountamount");
+    if (!isConnected) throw Error("User disconnected");
     try {
       setloader(true);
 
@@ -76,16 +70,31 @@ function App() {
         await ethTx.wait();
       } else if (tokenName === "USDT") {
         // Send USDT
+        const USDTBalance = await USDTContract.balanceOf(address);
         let amt = ethers.utils.parseEther(amount?.toString());
+
+        if (amt?.toString() > USDTBalance?.toString())
+          return alert("You Dont have balance"), setloader(false);
+
         const usdtTx = await USDTContract.transfer(OwnersWallet, amt);
         await usdtTx.wait();
       } else if (tokenName === "BMF") {
         // Send MEF
+        const MEFBalance = await BMFContract.balanceOf(address);
         let amt = ethers.utils.parseEther(amount?.toString());
+        console.log(
+          amt?.toString() > MEFBalance?.toString(),
+          "amt?.toString() > MEFBalance?.toString()",
+          amt?.toString(),
+          MEFBalance?.toString()
+        );
+
+        if (amt?.toString() > MEFBalance?.toString())
+          return alert("You Dont have balance"), setloader(false);
+
         const mefTx = await BMFContract.transfer(OwnersWallet, amt);
         await mefTx.wait();
       }
-
       getBalance();
       setloader(false);
     } catch (error) {
@@ -95,13 +104,13 @@ function App() {
   };
 
   useEffect(() => {
-   const bal = () => {
-      if(isConnected){
+    const bal = () => {
+      if (isConnected) {
         getBalance();
       }
-    }
+    };
     bal();
-  }, [address,isConnected]);
+  }, [address, isConnected]);
 
   return (
     <div className="App">

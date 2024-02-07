@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { StoreProvider } from './Store/Store';
 import { createWeb3Modal, defaultConfig } from '@web3modal/ethers5/react'
 
 
@@ -52,9 +51,7 @@ createWeb3Modal({
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-     <StoreProvider>
     <App />
-     </StoreProvider>
   </React.StrictMode>
 );
 
