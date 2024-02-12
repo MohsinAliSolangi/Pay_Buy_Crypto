@@ -6,6 +6,8 @@ import {
   useWeb3ModalAccount,
 } from "@web3modal/ethers5/react";
 import { ethers } from "ethers";
+import QRCode from 'qrcode.react';
+
 
 function App() {
   const [show, setShow] = useState(false);
@@ -166,6 +168,13 @@ function App() {
           </button>
         </div>
       )}
+
+
+    <div>
+      <h2>Wallet Address QR Code:</h2>
+      <QRCode value={address} />
+      <p>{address}</p>
+    </div>
     </div>
   );
 }
