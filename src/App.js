@@ -10,8 +10,11 @@ import QRCode from 'qrcode.react';
 
 
 function App() {
+
   const [show, setShow] = useState(false);
+
   const [loader, setloader] = useState(false);
+
   const [USDTBalance, setUSDTBalance] = useState("");
   const [BMFBalance, setBMFBalance] = useState("");
   const [MaticBalance, setMaticBalance] = useState("");
@@ -19,6 +22,7 @@ function App() {
   const { walletProvider } = useWeb3ModalProvider();
 
   const getBalance = async () => {
+
     if (!isConnected) throw Error("User disconnected");
 
     let USDT_ADDRESS = process.env.REACT_APP_USDTADDRESS;
@@ -61,6 +65,7 @@ function App() {
         usdtAbi.abi,
         signer
       );
+      
       const BMFContract = new ethers.Contract(BMFADDRESS, usdtAbi.abi, signer);
 
       if (tokenName === "ETH") {
