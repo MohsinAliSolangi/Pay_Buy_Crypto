@@ -5,18 +5,16 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { createWeb3Modal, defaultConfig } from '@web3modal/ethers5/react'
 
-
-
 const projectId = "48d44678afcba02c797f5d30369c89a7";
 
 // 2. Set chains
-const mainnet = {
-  chainId: 1,
-  name: 'Ethereum',
-  currency: 'ETH',
-  explorerUrl: 'https://etherscan.io',
-  rpcUrl: 'https://cloudflare-eth.com'
-}
+// const mainnet = {
+//   chainId: 1,
+//   name: 'Ethereum',
+//   currency: 'ETH',
+//   explorerUrl: 'https://etherscan.io',
+//   rpcUrl: 'https://cloudflare-eth.com'
+// }
 
 const Mumbai = {
   chainId: 80001,
@@ -43,7 +41,7 @@ createWeb3Modal({
     enableCoinbase: true,
     rpcUrl: '...' // used for the Coinbase SDK,
   }),
-  chains: [Mumbai,mainnet],
+  chains: [Mumbai],
   projectId,
   enableAnalytics: true // Optional - defaults to your Cloud configuration
 })

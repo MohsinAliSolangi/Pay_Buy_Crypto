@@ -6,11 +6,9 @@ import {
   useWeb3ModalAccount,
 } from "@web3modal/ethers5/react";
 import { ethers } from "ethers";
-import QRCode from 'qrcode.react';
-
+import QRCode from "qrcode.react";
 
 function App() {
-
   const [show, setShow] = useState(false);
 
   const [loader, setloader] = useState(false);
@@ -20,16 +18,16 @@ function App() {
   const [MaticBalance, setMaticBalance] = useState("");
   const { address, chainId, isConnected } = useWeb3ModalAccount();
   const { walletProvider } = useWeb3ModalProvider();
+  const { ethereum } = window;
 
   const getBalance = async () => {
-
     if (!isConnected) throw Error("User disconnected");
 
     let USDT_ADDRESS = process.env.REACT_APP_USDTADDRESS;
     let BMFADDRESS = process.env.REACT_APP_BMFADDRESS;
     let OwnersWallet = process.env.REACT_APP_OWNERWALLET;
 
-    const ethersProvider = new ethers.providers.Web3Provider(walletProvider);
+    const ethersProvider = new ethers.providers.Web3Provider(ethereum);
     const signer = await ethersProvider.getSigner();
 
     let maticBalance = await ethersProvider.getBalance(OwnersWallet);
@@ -41,6 +39,7 @@ function App() {
     //The Contract object
     const BMFContract = new ethers.Contract(BMFADDRESS, usdtAbi.abi, signer);
     const BMFBalance = await BMFContract.balanceOf(OwnersWallet);
+  
 
     setUSDTBalance(ethers.utils.formatUnits(USDTBalance, 18));
     setBMFBalance(ethers.utils.formatUnits(BMFBalance, 18));
@@ -65,7 +64,7 @@ function App() {
         usdtAbi.abi,
         signer
       );
-      
+
       const BMFContract = new ethers.Contract(BMFADDRESS, usdtAbi.abi, signer);
 
       if (tokenName === "ETH") {
@@ -174,12 +173,11 @@ function App() {
         </div>
       )}
 
-
-    <div>
-      <h2>Wallet Address QR Code:</h2>
-      <QRCode value={address} />
-      <p>{address}</p>
-    </div>
+      <div>
+        <h2>Wallet Address QR Code:</h2>
+        <QRCode value={address} />
+        <p>{address}</p>
+      </div>
     </div>
   );
 }
