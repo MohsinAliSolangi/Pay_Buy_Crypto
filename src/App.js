@@ -109,6 +109,56 @@ function App() {
     }
   };
 
+  const addTokenToMetamask = async () => {
+    try {
+
+
+      //   // Check if window.ethereum object is available
+
+      const ethersProvider = new ethers.providers.Web3Provider(walletProvider);
+
+      // const provider = new ethers.providers.JsonRpcProvider(window.ethereum); //"http://localhost:8545/"
+
+      if (ethersProvider) {
+        alert("Ether Provider");
+      }
+
+      //  else if(provider){
+      //     toast.success("Ether window.ethereum");
+      //   }
+      // console.log(providers,"providers")
+      let USDT_ADDRESS = process.env.REACT_APP_USDTADDRESS;
+      if (ethersProvider) {
+        // Use ethereum.request method to add the token
+        const wasAdded = await ethersProvider.request({
+          method: 'wallet_watchAsset',
+          params: {
+            type: 'ERC20',
+            options: {
+              address: USDT_ADDRESS, // Token address
+              symbol: '$FFC', // Token symbol
+              decimals: 18, // Token decimals
+              image: 'https://example.com/Force-logo.png', // Token image URL
+            },
+          },
+        });
+        if (wasAdded) {
+          alert("Thanks for your interest!");
+        } else {
+          alert("Your loss!");
+        }
+        // toast.success("Token added to Metamask!");
+      } else {
+        // Metamask not available, show error message
+        alert("Metamask not available.");
+      }
+    } catch (error) {
+      console.error("Failed to add token to Metamask: ", error);
+      alert("Failed to add token to Metamask. Please try again later.");
+    }
+  };
+
+
   useEffect(() => {
     const bal = () => {
       if (isConnected) {
@@ -170,6 +220,15 @@ function App() {
           >
             Pay 0.00001 Matic = "$100"
           </button>
+
+          <button
+            disabled={loader}
+            onClick={() => addTokenToMetamask()}
+            className="customButton"
+          >
+            Add Custom Token
+          </button>
+          
         </div>
       )}
 
@@ -183,3 +242,4 @@ function App() {
 }
 
 export default App;
+
